@@ -35,6 +35,52 @@
                 android:text="فعال" />
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="صدا"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/genderGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioFemale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="صدای زن" />
+
+            <RadioButton
+                android:id="@+id/radioMale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="صدای مرد" />
+        </RadioGroup>
+
+        <CheckBox
+            android:id="@+id/offlineCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="صدای فارسی آفلاین (بدون نیاز به TTS گوشی)" />
+
+        <CheckBox
+            android:id="@+id/greetingCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="گفتن سلام (صبح/روز/عصر/شب بخیر)" />
+
+        <CheckBox
+            android:id="@+id/dateCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="گفتن روز و تاریخ شمسی" />
+
         <Button
             android:id="@+id/sayNowButton"
             android:layout_width="match_parent"

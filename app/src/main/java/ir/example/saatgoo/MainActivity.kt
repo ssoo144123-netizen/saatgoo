@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
-        speaker = TimeSpeaker(this)
+        speaker = TimeSpeaker(this) { hasFarsi -> if (!hasFarsi) promptInstallFarsiVoice() }
 
         askNotificationPermission()
 
@@ -46,6 +46,17 @@ class MainActivity : AppCompatActivity() {
 
         b.sayNowButton.setOnClickListener { speaker.speakNow(hour12 = false) }
 
+        b.genderGroup.check(if (prefs.getString("gender", "female") == "male") b.radioMale.id else b.radioFemale.id)
+        b.genderGroup.setOnCheckedChangeListener { _, id ->
+            prefs.edit().putString("gender", if (id == b.radioMale.id) "male" else "female").apply()
+        }
+        b.offlineCheck.isChecked = prefs.getBoolean("offline", false)
+        b.offlineCheck.setOnCheckedChangeListener { _, on -> prefs.edit().putBoolean("offline", on).apply() }
+        b.greetingCheck.isChecked = prefs.getBoolean("greeting", true)
+        b.greetingCheck.setOnCheckedChangeListener { _, on -> prefs.edit().putBoolean("greeting", on).apply() }
+        b.dateCheck.isChecked = prefs.getBoolean("date", true)
+        b.dateCheck.setOnCheckedChangeListener { _, on -> prefs.edit().putBoolean("date", on).apply() }
+
         val h = prefs.getInt("alarm_h", -1)
         val m = prefs.getInt("alarm_m", -1)
         if (h >= 0) {
@@ -63,6 +74,15 @@ class MainActivity : AppCompatActivity() {
             prefs.edit().remove("alarm_h").remove("alarm_m").apply()
             AlarmScheduler.cancel(this)
             Toast.makeText(this, "هشدار لغو شد", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun promptInstallFarsiVoice() {
+        Toast.makeText(this, "صدای فارسی روی این گوشی نصب نیست. نصب آن را باز می‌کنیم.", Toast.LENGTH_LONG).show()
+        try {
+            startActivity(android.content.Intent(android.speech.tts.TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA))
+        } catch (_: Exception) {
+            Toast.makeText(this, "در تنظیمات گوشی، بخش Text-to-speech را باز کن و بسته‌ی فارسی را نصب کن.", Toast.LENGTH_LONG).show()
         }
     }
 
