@@ -14,7 +14,7 @@
 ۳. APK در `app/build/outputs/apk/debug/` ساخته می‌شود.
 
 ## نکات
-- نیاز به minSdk 24 و targetSdk 34.
+- نیاز به minSdk 23 (Android 6.0) و targetSdk 34.
 - برای صدای فارسی، موتور TTS گوشی باید بستهٔ فارسی داشته باشد (مثلاً Google Text-to-Speech).
 - هشدار با `setAndAllowWhileIdle` زمان‌بندی می‌شود؛ ممکن است چند دقیقه دیرتر از زمان دقیق اجرا شود.
 - این نسخه هنوز برای Doze و بهینه‌سازی باتری کامل نیست.
