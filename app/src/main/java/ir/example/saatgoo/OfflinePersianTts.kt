@@ -18,7 +18,6 @@ object OfflinePersianTts {
 
     // Piper Persian voices. Folder names must match the files extracted into app/src/main/assets.
     const val MALE_MODEL = "vits-piper-fa_IR-amir-medium"
-    const val FEMALE_MODEL = "vits-piper-fa_IR-ganji-medium"
 
     private val worker = Executors.newSingleThreadExecutor()
     private val engines = HashMap<String, OfflineTts>()
@@ -27,16 +26,31 @@ object OfflinePersianTts {
         context.assets.list(modelDir)?.contains("model.onnx") == true
     } catch (_: Exception) { false }
 
+    /** Returns null when offline voice can be used, otherwise a Persian reason for the user. */
+    fun unavailableReason(context: Context, male: Boolean): String? {
+        if (!male) return "صدای زن آفلاین در این نسخه نیست؛ از صدای گوشی استفاده می‌شود."
+        val dir = MALE_MODEL
+        if (!isInstalled(context, dir)) return "مدل صوتی آفلاین داخل این APK نیست. APK را با نسخه‌ی جدید از GitHub Actions بساز."
+        return try {
+            System.loadLibrary("sherpa-onnx-jni")
+            null
+        } catch (_: Throwable) {
+            "کتابخانه‌ی صوتی آفلاین داخل این APK نیست."
+        }
+    }
+
     fun speak(context: Context, text: String, male: Boolean, speed: Float = 1.0f) {
-        val dir = if (male) MALE_MODEL else FEMALE_MODEL
+        val dir = MALE_MODEL
         val app = context.applicationContext
         worker.execute {
             try {
                 val tts = engines.getOrPut(dir) { load(app, dir) }
                 val audio = tts.generate(text, 0, speed)
                 play(audio.samples, audio.sampleRate)
-            } catch (_: Throwable) {
-                // Model missing or native library not present: caller falls back to system TTS.
+            } catch (t: Throwable) {
+                android.os.Handler(android.os.Looper.getMainLooper()).post {
+                    android.widget.Toast.makeText(app, "خطا در صدای آفلاین: ${t.javaClass.simpleName}", android.widget.Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

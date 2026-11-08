@@ -51,7 +51,14 @@ class MainActivity : AppCompatActivity() {
             prefs.edit().putString("gender", if (id == b.radioMale.id) "male" else "female").apply()
         }
         b.offlineCheck.isChecked = prefs.getBoolean("offline", false)
-        b.offlineCheck.setOnCheckedChangeListener { _, on -> prefs.edit().putBoolean("offline", on).apply() }
+        b.offlineCheck.setOnCheckedChangeListener { _, on ->
+            prefs.edit().putBoolean("offline", on).apply()
+            if (on) {
+                OfflinePersianTts.unavailableReason(this, male = true)?.let {
+                    Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
         b.greetingCheck.isChecked = prefs.getBoolean("greeting", true)
         b.greetingCheck.setOnCheckedChangeListener { _, on -> prefs.edit().putBoolean("greeting", on).apply() }
         b.dateCheck.isChecked = prefs.getBoolean("date", true)
