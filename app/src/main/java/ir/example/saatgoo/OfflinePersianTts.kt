@@ -18,12 +18,13 @@ object OfflinePersianTts {
 
     // Piper Persian voices. Folder names must match the files extracted into app/src/main/assets.
     const val MALE_MODEL = "vits-piper-fa_IR-amir-medium"
+    const val MODEL_FILE = "fa_IR-amir-medium.onnx"
 
     private val worker = Executors.newSingleThreadExecutor()
     private val engines = HashMap<String, OfflineTts>()
 
     fun isInstalled(context: Context, modelDir: String): Boolean = try {
-        context.assets.list(modelDir)?.contains("model.onnx") == true
+        context.assets.list(modelDir)?.contains(MODEL_FILE) == true
     } catch (_: Exception) { false }
 
     /** Returns null when offline voice can be used, otherwise a Persian reason for the user. */
@@ -59,7 +60,7 @@ object OfflinePersianTts {
         val config = OfflineTtsConfig(
             model = OfflineTtsModelConfig(
                 vits = OfflineTtsVitsModelConfig(
-                    model = "$dir/model.onnx",
+                    model = "$dir/$MODEL_FILE",
                     tokens = "$dir/tokens.txt",
                     dataDir = "$dir/espeak-ng-data"
                 ),
