@@ -25,14 +25,12 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Download Persian Piper voices (offline TTS)
+      - name: Download Persian Piper voice (male, offline TTS)
         run: |
           set -e
           mkdir -p app/src/main/assets
-          for v in vits-piper-fa_IR-amir-medium vits-piper-fa_IR-ganji-medium; do
-            curl -fL -o "/tmp/$v.tar.bz2" "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/$v.tar.bz2"
-            tar xjf "/tmp/$v.tar.bz2" -C app/src/main/assets
-          done
+          curl -fL -o /tmp/amir.tar.bz2 https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-fa_IR-amir-medium.tar.bz2
+          tar xjf /tmp/amir.tar.bz2 -C app/src/main/assets
 
       - name: Download sherpa-onnx native libraries
         run: |
@@ -49,7 +47,7 @@ jobs:
         run: |
           APK=$(ls app/build/outputs/apk/debug/*.apk | head -n1)
           echo "APK: $APK  size: $(du -h "$APK" | cut -f1)"
-          unzip -l "$APK" | grep -E "libsherpa-onnx-jni.so|model.onnx" || { echo "Offline TTS files missing from APK"; exit 1; }
+          unzip -l "$APK" | grep -E "libsherpa-onnx-jni.so|fa_IR-amir-medium.onnx" || { echo "Offline TTS files missing from APK"; exit 1; }
 
       - name: Upload APK
         uses: actions/upload-artifact@v5
