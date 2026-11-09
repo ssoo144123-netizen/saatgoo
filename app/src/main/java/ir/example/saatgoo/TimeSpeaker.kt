@@ -37,15 +37,11 @@ class TimeSpeaker(
 
     private fun speak(text: String) {
         val male = prefs.getString("gender", "female") == "male"
-        if (prefs.getBoolean("offline", false)) {
-            val reason = OfflinePersianTts.unavailableReason(context, male)
-            if (reason == null) {
-                OfflinePersianTts.speak(context, text, male)
-                return
-            }
-            android.os.Handler(android.os.Looper.getMainLooper()).post {
-                android.widget.Toast.makeText(context, reason, android.widget.Toast.LENGTH_LONG).show()
-            }
+        if (prefs.getBoolean("offline", false) &&
+            OfflinePersianTts.isInstalled(context, if (male) OfflinePersianTts.MALE_MODEL else OfflinePersianTts.FEMALE_MODEL)
+        ) {
+            OfflinePersianTts.speak(context, text, male)
+            return
         }
         applyGender()
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "saatgoo-${System.currentTimeMillis()}")

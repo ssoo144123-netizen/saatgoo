@@ -29,8 +29,7 @@
 - اگر آن صفحه باز نشد، از تنظیمات گوشی بخش Text-to-speech را باز کن و بسته‌ی فارسی را نصب کن (مثلاً Google Text-to-speech).
 
 ## صدای فارسی آفلاین (Piper / sherpa-onnx)
-- فقط صدای مرد آفلاین است (مدل `amir`). صدای زن از TTS گوشی استفاده می‌کند.
 - مدل‌ها در زمان build از release های sherpa-onnx دانلود و داخل `app/src/main/assets` قرار می‌گیرند (در workflow).
-- مدل مرد: `vits-piper-fa_IR-amir-medium`.
+- مدل مرد: `vits-piper-fa_IR-amir-medium`. مدل زن: `vits-piper-fa_IR-ganji-medium`؛ جنسیت هر مدل را قبل از انتشار با گوش دادن بررسی کن.
 - کتابخانه‌ی sherpa-onnx (v1.13.8) از release رسمی گرفته شده و از قبل داخل پروژه است: `app/src/main/java/com/k2fsa/sherpa/onnx/Tts.kt` و فایل‌های `.so` در زمان build از GitHub Actions دانلود می‌شوند (فایل‌ها داخل ریپو نیستند تا حجم بالا نرود).
 - هر مدل حدود ۶۰ مگابایت است؛ APK بزرگ می‌شود.
